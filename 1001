@@ -1,0 +1,80 @@
+#include<iostream>
+#include<cstdio>
+#include<cstring>
+using namespace std;
+#define nmb(x,y) (x-1)*m+y
+const int N=1e6+6;
+const int M=6e6+6;
+const int INF=1e9+7;
+ 
+int n,m;
+struct graph{
+    int cnt,l[N],x[M],e[M],f[M];
+    int d[N],r[N];
+    int n,s,t;
+    int hd,tl,q[N];
+    graph(){
+        cnt=1;
+    }
+    void pshe(int u,int v,int c){
+        ++cnt;x[cnt]=l[u];l[u]=cnt;e[cnt]=v;f[cnt]=c;
+        ++cnt;x[cnt]=l[v];l[v]=cnt;e[cnt]=u;f[cnt]=c;
+    }
+    bool bfs(){
+        int i,v;
+        memset(d,-1,sizeof(d));
+        d[s]=1;hd=0;tl=1;q[0]=s;
+        while(hd!=tl){
+            v=q[hd];++hd;
+            for(i=l[v];i;i=x[i])
+                if(f[i]&&d[e[i]]==-1){
+                    d[e[i]]=d[v]+1;
+                    q[tl]=e[i];++tl;
+                }
+        }
+        return d[t]!=-1;
+    }
+    int dfs(int v,int c){
+        if(v==t)return c;
+        int w=0,p;
+        for(int i=l[v];i;i=x[i])
+            if(f[i]&&d[e[i]]==d[v]+1){
+                p=c-w;p=dfs(e[i],min(p,f[i]));
+                f[i]-=p;if(f[i])r[v]=i;f[i^1]+=p;
+                w+=p;if(w==c)return c;
+            }
+        if(!w)d[v]=-1;
+        return w;
+    }
+    int mxflw(int p,int u,int v){
+        int i,ans=0;
+        s=u;t=v;n=p;
+        while(bfs()){
+            for(i=1;i<=n;i++)r[i]=l[i];
+            ans+=dfs(s,INF);
+        }
+        return ans;
+    }
+}grph;
+ 
+int main()
+{
+    int i,j,w;
+    scanf("%d%d",&n,&m);
+    for(i=1;i<=n;i++)
+        for(j=1;j<m;j++){
+            scanf("%d",&w);
+            grph.pshe(nmb(i,j),nmb(i,j+1),w);
+        }
+    for(i=1;i<n;i++)
+        for(j=1;j<=m;j++){
+            scanf("%d",&w);
+            grph.pshe(nmb(i,j),nmb(i+1,j),w);
+        }
+    for(i=1;i<n;i++)
+        for(j=1;j<m;j++){
+            scanf("%d",&w);
+            grph.pshe(nmb(i,j),nmb(i+1,j+1),w);
+        }
+    printf("%d",grph.mxflw(n*m,nmb(1,1),nmb(n,m)));
+}
