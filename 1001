@@ -37,7 +37,7 @@ struct graph{
     int dfs(int v,int c){
         if(v==t)return c;
         int w=0,p;
-        for(int i=l[v];i;i=x[i])
+        for(int i=r[v];i;i=x[i])
             if(f[i]&&d[e[i]]==d[v]+1){
                 p=c-w;p=dfs(e[i],min(p,f[i]));
                 f[i]-=p;if(f[i])r[v]=i;f[i^1]+=p;
