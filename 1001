@@ -50,7 +50,7 @@ struct graph{
         int i,ans=0;
         s=u;t=v;
         while(bfs()){
-            for(i=1;i<=n;i++)r[i]=l[i];
+            memcpy(r,l,sizeof(r));
             ans+=dfs(s,INF);
         }
         return ans;
