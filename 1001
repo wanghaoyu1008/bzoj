@@ -77,4 +77,5 @@ int main()
             grph.pshe(nmb(i,j),nmb(i+1,j+1),w);
         }
     printf("%d",grph.mxflw(nmb(1,1),nmb(n,m)));
+    return 0;
 }
