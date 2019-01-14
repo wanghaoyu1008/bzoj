@@ -1,0 +1,39 @@
+#include<iostream>
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+const int N=5e4+4;
+const double EPS=1e-8;
+
+struct line{
+	int k,b,u;
+}l[N];
+int tp,s[N];
+
+bool cmp1(line a,line b){return a.k<b.k||a.k==b.k&&a.b<b.b;}
+bool cmp2(int a,int b){return l[a].u<l[b].u;}
+
+double pnt(line x,line y)
+{
+	return -(double)(y.b-x.b)/(y.k-x.k);
+}
+
+int main()
+{
+	int n,i;
+	scanf("%d",&n);
+	for(i=1;i<=n;i++){
+		scanf("%d%d",&l[i].k,&l[i].b);
+		l[i].u=i;
+	}
+	sort(l+1,l+n+1,cmp1);
+	tp=1;s[1]=1;
+	for(i=2;i<=n;i++){
+		while(tp&&l[i].k==l[s[tp]].k||tp>=2&&pnt(l[i],l[s[tp]])-pnt(l[s[tp-1]],l[s[tp]])<EPS)--tp;
+		++tp;s[tp]=i;
+	}
+	sort(s+1,s+tp+1,cmp2);
+	for(i=1;i<=tp;i++)
+		printf("%d ",l[s[i]].u);
+	return 0;
+}
