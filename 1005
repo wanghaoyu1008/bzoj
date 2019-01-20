@@ -1,0 +1,55 @@
+//the tree of n nodes is one to one mapping from the sequence of n-2 numbers
+//prufer sequence
+//excayley
+#include<iostream>
+#include<cstdio>
+using namespace std;
+const int N=3003;
+
+int sp,p[N],ip[N],mp[N];
+int ans[N],l;
+
+void dvd(int n,int t){
+	int i,j;
+	for(i=1;i<=sp;i++)
+		for(j=p[i];j<=n;j*=p[i])
+			mp[i]=mp[i]+n/j*t;
+}
+
+void mul(int x){
+	int i;
+	for(i=0;i<l;i++)ans[i]*=x;
+	for(i=0;i<l;i++){
+		ans[i+1]+=ans[i]/10;
+		ans[i]%=10;
+	}
+	while(ans[l]){ans[l+1]=ans[l]/10;ans[l]%=10;++l;}
+}
+
+int main()
+{
+	int n,i,j,d,sd=0,sn=0;
+	scanf("%d",&n);
+	for(i=2;i<n;i++)ip[i]=1;
+	for(i=2;i<n;i++){
+		if(ip[i]){++sp;p[sp]=i;}
+		for(j=1;j<=sp&&i*p[j]<n;j++){
+			ip[i*p[j]]=0;
+			if(i%p[j]==0)break;
+		}
+	}
+	dvd(n-2,1);
+	for(i=1;i<=n;i++){
+		scanf("%d",&d);
+		if(d==0){printf("0");return 0;}
+		if(d==-1)++sn;
+		else {sd+=d-1;dvd(d-1,-1);}
+	}
+	if(n==1){printf("1");return 0;}
+	if(sd>n-2||!sn&&sd<n-2){printf("0");return 0;}
+	dvd(n-2-sd,-1);l=1;ans[0]=1;
+	for(i=1;i<=n-2-sd;i++)mul(sn);
+	for(i=1;i<=sp;i++)for(j=1;j<=mp[i];j++)mul(p[i]);
+	for(i=l-1;i>=0;i--)printf("%d",ans[i]);
+	return 0;
+}
