@@ -1,0 +1,19 @@
+#include<iostream>
+#include<cstdio>
+using namespace std;
+const long long M=100003;
+
+long long pwr(long long x,long long a){
+	if(!a)return 1;
+	long long r=pwr(x,a>>1);r=r*r%M;
+	if(a&1)r=r*x%M;
+	return r;
+}
+
+int main()
+{
+	long long n,m;
+	scanf("%lld%lld",&m,&n);
+	printf("%lld",(pwr(m,n)-m*pwr(m-1,n-1)%M+M)%M);
+	return 0;
+}
