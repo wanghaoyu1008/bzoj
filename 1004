@@ -1,0 +1,19 @@
+#include<iostream>
+#include<cstdio>
+using namespace std;
+
+int ix[100];
+
+int main()
+{
+	int sr,sb,sg,m,P,n,i,j,ans=1;
+	scanf("%d%d%d%d%d",&sr,&sb,&sg,&m,&P);n=sr+sb+sg;
+	for(i=1;i<=n||i<=m;i++){ix[i]=1;for(j=1;j<=P-2;j++)ix[i]=ix[i]*i%P;}
+	for(i=1;i<=n;i++)ans=ans*i%P;
+	for(i=1;i<=sr;i++)ans=ans*ix[i]%P;
+	for(i=1;i<=sb;i++)ans=ans*ix[i]%P;
+	for(i=1;i<=sg;i++)ans=ans*ix[i]%P;
+	ans=ans*ix[m+1]%P;
+	printf("%d",ans);
+	return 0;
+}
